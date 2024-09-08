@@ -34,6 +34,8 @@ borrowing records. It includes authentication using JWT tokens and role-based ac
 - **Exception Handling**
     - Using ControllerAdviser to catch all exceptions types
 
+- **Testing**
+    - Running Unit test for all the APIs in the system in one command
 ## Setup Instructions
 
 ### Prerequisites
