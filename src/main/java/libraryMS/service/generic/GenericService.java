@@ -7,6 +7,8 @@ import libraryMS.utils.model.Pagination;
 import libraryMS.utils.service.PaginationService;
 import libraryMS.utils.service.RefService;
 import jakarta.transaction.Transactional;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -15,17 +17,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.io.Serializable;
 import java.util.*;
 
+@RequiredArgsConstructor
 public class GenericService<Dao extends GenericDao, Domain extends GenericDomain, IdClass extends Serializable> {
 
-    @Autowired
-    protected Dao dao;
+    protected final Dao dao;
 
-    @Autowired
-    private RefService refService;
+    private final RefService refService;
 
-
-    @Autowired
-    private PaginationService paginationService;
+    private final PaginationService paginationService;
 
 
     @Transactional

@@ -31,6 +31,8 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @RequiredArgsConstructor
 public class SecurityConfig implements WebMvcConfigurer {
 
+    private final ApplicationUserService applicationUserService;
+
     private final JwtAuthFilter authFilter;
 
     private final UnauthorizedHandler unauthorizedHandler;
@@ -42,7 +44,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return new ApplicationUserService();
+        return applicationUserService;
     }
 
 

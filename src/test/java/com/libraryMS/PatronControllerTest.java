@@ -3,10 +3,12 @@ package com.libraryMS;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import libraryMS.Starter;
 import libraryMS.controller.BookController;
+import libraryMS.controller.PatronController;
 import libraryMS.domain.Book;
+import libraryMS.domain.Patron;
 import libraryMS.security.controller.AuthController;
 import libraryMS.security.entity.AuthRequest;
-import libraryMS.service.BookService;
+import libraryMS.service.PatronService;
 import libraryMS.utils.model.ResponseObject;
 import org.hamcrest.Matchers;
 import org.hamcrest.collection.IsCollectionWithSize;
@@ -17,7 +19,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.Map;
 import java.util.UUID;
@@ -25,21 +26,19 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.emptyOrNullString;
 import static org.hamcrest.Matchers.not;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {Starter.class})
-public class BookControllerTest extends AbstractTest {
+public class PatronControllerTest extends AbstractTest {
 
     @Autowired
-    private BookService bookService;
+    private PatronService patronService;
 
     @Autowired
-    private BookController bookController;
+    private PatronController patronController;
 
     @Autowired
     private AuthController authController;
@@ -50,64 +49,64 @@ public class BookControllerTest extends AbstractTest {
     @Test
     public void contextLoads() {
         assertThat(authController).isNotNull();
-        assertThat(bookController).isNotNull();
-        assertThat(bookService).isNotNull();
+        assertThat(patronController).isNotNull();
+        assertThat(patronService).isNotNull();
     }
 
 
     @Test
-    public void testGetAllBooks() throws Exception {
+    public void testGetAllPatrons() throws Exception {
         String token = getTokenFromLogin();
 
-        mvc.perform(get("/books").header("Authorization", "Bearer " + token))
+        mvc.perform(get("/patrons").header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.model.data", IsCollectionWithSize.hasSize(Matchers.greaterThan(0))));
     }
 
     @Test
-    public void testGetBookById() throws Exception {
+    public void testGetPatronById() throws Exception {
         String token = getTokenFromLogin();
 
-        mvc.perform(get("/books/1")
+        mvc.perform(get("/patrons/1")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.model.title", not(emptyOrNullString())));
+                .andExpect(jsonPath("$.model.name", not(emptyOrNullString())));
     }
 
     @Test
-    public void testAddBook() throws Exception {
+    public void testAddPatron() throws Exception {
         String token = getTokenFromLogin();
 
-        Book newBook = new Book("Hunger games2", "John week2", 2000, UUID.randomUUID().toString().replace("-", "").substring(0, 13), null);
+        Patron newPatron = new Patron("Patron test","patron number: 89987645,patron email: patron@patron.com",null);
 
-        mvc.perform(post("/books")
+        mvc.perform(post("/patrons")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(newBook)))
+                        .content(objectMapper.writeValueAsString(newPatron)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.model.title").value("Hunger games2"));
+                .andExpect(jsonPath("$.model.name").value("Patron test"));
     }
 
     @Test
-    public void testUpdateBook() throws Exception {
+    public void testUpdatePatron() throws Exception {
         String token = getTokenFromLogin();
 
-        Book updatedBook = new Book("Updated Book", "Updated Author", 2022, "1d34d67891234", null);
+        Patron updatedPatron = new Patron("Patron test2","patron number: 899876425,patron email: patro2n@patron.com",null);
 
-        mvc.perform(put("/books/1")
+        mvc.perform(put("/patrons/1")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(updatedBook)))
+                        .content(objectMapper.writeValueAsString(updatedPatron)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.model.title").value("Updated Book"));
+                .andExpect(jsonPath("$.model.name").value("Patron test2"));
     }
 
     @Test
-    public void testDeleteBook() throws Exception {
+    public void testDeletePatron() throws Exception {
         String token = getTokenFromLogin();
 
-        mvc.perform(delete("/books/1")
+        mvc.perform(delete("/patrons/1")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());

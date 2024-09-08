@@ -20,13 +20,17 @@ borrowing records. It includes authentication using JWT tokens and role-based ac
     - Making sure the data integrity and check if the format of some attributes are valid or not.
 
 - **Authentication:**
-    - Login and logout functionality with JWT token-based authentication.
+    - Login using email and password and logout functionality with JWT token-based authentication .
 
 - **Role-Based Authorization:**
     - Role-based access control (ADMIN, USER).
+  
 - **Caching :**
     - Get all and get by id for all entities are cached
-
+  
+- **Logging :**
+    - Logging on the console like the execution time of the functions and the function name.
+  
 - **Exception Handling**
     - Using ControllerAdviser to catch all exceptions types
 

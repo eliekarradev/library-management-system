@@ -1,9 +1,12 @@
 package libraryMS.utils.service;
 
+import jakarta.persistence.PersistenceContext;
 import libraryMS.domain.generic.GenericDomain;
 import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.beans.Introspector;
@@ -15,10 +18,11 @@ import java.util.List;
 import java.util.Set;
 
 @Service
+//@RequiredArgsConstructor
 public class RefService {
-    @Autowired
-    //@Qualifier("localDBEntityManagerFactory")
-    private EntityManager em;
+
+    @PersistenceContext
+    private  EntityManager em;
 
     public void linkChildrenWithParents(Object domain, List<Class<?>> parents) {
         try {
