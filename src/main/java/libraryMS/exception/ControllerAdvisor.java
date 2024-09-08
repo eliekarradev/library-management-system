@@ -3,7 +3,6 @@ package libraryMS.exception;
 import libraryMS.exception.exceptions.ApiBaseException;
 import libraryMS.exception.exceptions.CustomClassNotFoundException;
 import libraryMS.exception.exceptions.CustomFileNotFoundException;
-import libraryMS.exception.exceptions.UnAuthorizedException;
 import libraryMS.utils.model.ResponseObject;
 import libraryMS.utils.service.MessageSourceService;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -17,18 +16,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
-import org.springframework.web.ErrorResponseException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import javax.persistence.PersistenceException;
 import java.security.SignatureException;
@@ -56,7 +50,6 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     public ControllerAdvisor(MessageSourceService mss) {
         this.mss = mss;
     }
-
 
 
     @ExceptionHandler(DataIntegrityViolationException.class)
@@ -229,11 +222,14 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         ex.printStackTrace();
         if (ex instanceof ApiBaseException) {
             httpStatus = ((ApiBaseException) ex).getStatus();
-            message = mss.getMessage(message);
+            //for messages that are not exist in the message Resource Bundle
+            try {
+                message = mss.getMessage(message);
+            } catch (Exception e) {
+                message = ex.getMessage();
+            }
         }
-//        else if (ex instanceof AccessDeniedException) {
-//            httpStatus = HttpStatus.FORBIDDEN;
-//        }
+
         return handleFailedResponse(message, httpStatus, null);
     }
 

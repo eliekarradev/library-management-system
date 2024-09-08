@@ -16,6 +16,10 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 
+/**
+ * To handle the errors that come from filters
+ * An additional layer to handle errors
+ */
 @Component
 @Primary
 @Order(value = 1)
@@ -27,15 +31,15 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } catch (AccessDeniedException e) {
             e.printStackTrace();
-            handleResponse(request,response,HttpStatus.UNAUTHORIZED,"UnAuthorized");
+            handleResponse(request, response, HttpStatus.UNAUTHORIZED, "UnAuthorized");
         } catch (RuntimeException e) {
             e.printStackTrace();
-            handleResponse(request,response,HttpStatus.INTERNAL_SERVER_ERROR,"Error");
+            handleResponse(request, response, HttpStatus.INTERNAL_SERVER_ERROR, "Error");
         }
     }
 
 
-    private void handleResponse(HttpServletRequest request, HttpServletResponse response,HttpStatus status,String message) throws IOException {
+    private void handleResponse(HttpServletRequest request, HttpServletResponse response, HttpStatus status, String message) throws IOException {
         response.setStatus(status.value());
         response.setContentType("application/json");
 

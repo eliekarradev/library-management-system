@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Pagination  {
+public class Pagination {
     private int page;
     @Nullable
     private Integer size;

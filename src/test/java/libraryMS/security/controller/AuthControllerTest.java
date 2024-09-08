@@ -8,13 +8,17 @@ import libraryMS.security.service.JwtService;
 import libraryMS.service.ApplicationUserService;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -29,20 +33,23 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = {AuthenticationManager.class, ApplicationUserService.class, JwtService.class})
 public class AuthControllerTest {
+
 
     private MockMvc mockMvc;
 
-    @Mock
+    @Autowired
     private ApplicationUserService applicationUserService;
 
-    @Mock
+    @Autowired
     private JwtService jwtService;
 
-    @Mock
+    @Autowired
     private AuthenticationManager authenticationManager;
 
-    @InjectMocks
+    @Autowired
     private AuthController authController;
 
     private ObjectMapper objectMapper = new ObjectMapper();
